@@ -50,6 +50,11 @@ class Answer
      */
     private $status = self::STATUS_NEEDS_APPROVAL;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="answers")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -131,5 +136,17 @@ class Answer
     public function isApproved(): bool
     {
         return $this->status === self::STATUS_APPROVED;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

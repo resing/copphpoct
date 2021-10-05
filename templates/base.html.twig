@@ -25,8 +25,13 @@
                     </li>
                 </ul>
             </div>
-
-            <button class="btn btn-dark">Sign up</button>
+            {% if app.user %}
+                <div class="mb-3">
+                    You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}"><button  class="btn btn-dark">Logout</button></a>
+                </div>
+                {% else %}
+                    <a href="{{ path('app_login') }}" ><button  class="btn btn-dark">Sign up</button></a>
+            {% endif %}
         </nav>
 
         {% block body %}{% endblock %}

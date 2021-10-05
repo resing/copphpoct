@@ -3,17 +3,23 @@
 {% block title %}Popular Answers{% endblock %}
 
 {% block body %}
-<div class="container my-md-4">
-    <div class="row">
-        <h1>Most Popular Answers</h1>
-
-        <ul class="list-unstyled">
-            {% for answer in answers %}
-                {{ include('answers/_answer.html.twig', {
-                    showQuestion: true
-                }) }}
-            {% endfor %}
-        </ul>
+    <div class="jumbotron-img p-2 mb-2">
+        <div class="container">
+            <h1 class="display-4">Your Questions Answered</h1>
+            <div class="lead">And even answers for those questions you didn't think to ask!</div>
+        </div>
     </div>
-</div>
+    <div class="container my-md-4">
+        <div class="row">
+            <h1>Most Popular Answers</h1>
+
+            <ul class="list-unstyled">
+                {% for answer in answers %}
+                    {{ include('answers/_answer.html.twig', {
+                        showQuestion: true
+                    }) }}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 {% endblock %}

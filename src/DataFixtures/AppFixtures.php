@@ -9,6 +9,7 @@ use App\Factory\AnswerFactory;
 use App\Factory\QuestionFactory;
 use App\Factory\QuestionTagFactory;
 use App\Factory\TagFactory;
+use App\Factory\UserFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -17,29 +18,38 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         TagFactory::createMany(100);
+        $users = UserFactory::createMany(20);
 
-        $questions = QuestionFactory::createMany(20, function() {
+        $questions = QuestionFactory::createMany(20 , function () use ($users) {
             return [
-                'questionTags' => QuestionTagFactory::new(function() {
+                'questionTags' => QuestionTagFactory::new(function () {
                     return [
-                        'tag' => TagFactory::random(),
+                        'tag' => TagFactory::random() ,
                     ];
-                })->many(1, 5),
+
+                })->many(1 , 5) ,
+                'user' => $users[array_rand($users)] ,
             ];
         });
-
-        QuestionFactory::new()
-            ->unpublished()
-            ->many(5)
-            ->create()
-        ;
-
-        AnswerFactory::createMany(100, function() use ($questions) {
+        QuestionFactory::new(function () use ($users) {
             return [
-                'question' => $questions[array_rand($questions)]
+                'user' => $users[array_rand($users)] ,
+            ];
+        }
+        )->unpublished()->many(5)->create();
+
+        AnswerFactory::createMany(100 , function () use ($questions , $users) {
+            return [
+                'question' => $questions[array_rand($questions)] ,
+                'user' => $users[array_rand($users)] ,
             ];
         });
-        AnswerFactory::new()->needsApproval()->many(20)->create();
+        AnswerFactory::new(function () use ($users) {
+            return [
+                'user' => $users[array_rand($users)] ,
+            ];
+        }
+        )->needsApproval()->many(20)->create();
 
         $manager->flush();
     }
